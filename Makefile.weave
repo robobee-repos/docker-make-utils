@@ -1,0 +1,124 @@
+# The shell of the Makefile goals.
+SHELL := /bin/bash
+# The path of the weave tool.
+WEAVE := /usr/local/bin/weave
+# The default goal.
+.DEFAULT_GOAL := run
+# All of the goals mentioned below.
+.PHONY: _run _rerun _rm _clean _test _restart _bash _localuser _dataContainer _rm_dataContainer
+# The container name.
+#NAME :=
+# The docker command to create the container.
+#DOCKER_CMD :=
+# The docker command to start the container.
+DOCKER_RUN ?= docker start $(NAME)
+# The name of the container running the authoritative DNS server, for example "maradns-deadwood".
+#DNS_SERVER ?=
+# The local container user. Used by the @_containeruser@ goal.
+#CONTAINER_USER ?=
+# The data docker container image name, for example "mysql:latest".
+#DATA_IMAGE_NAME ?=
+# The convoy volume name, for example "vol1".
+#DATA_VOL_NAME ?=
+# The data docker container mount path, for example "/var/lib/mysql".
+#DATA_MOUNT_PATH ?=
+# The data docker container name, for example "db_data".
+#DATA_CONTAINER_NAME ?=
+
+# Retrieves the IP address of the DNS server
+DNS_SERVER_IP = `docker exec $(DNS_SERVER) bash -c 'ifconfig eth0|grep -Po \"t addr:\K[\d.]+\"'`"
+
+# Sets the DNS server docker container argument.
+define DNS_SERVER_ARG =
+if [ -n "$(DNS_SERVER)" ]; then \
+DNS_ARG="--dns=$(DNS_SERVER_IP); \
+else \
+DNS_ARG=""; \
+fi &&
+endef
+
+# checks that the weave network is running.
+weave_running = $(WEAVE) status >/dev/null
+
+# Checks if the container exists.
+container_exists = docker ps -a | egrep '^.*\s+$(NAME)$$'
+
+# Checks if the container is already running.
+container_running = docker ps | egrep '^.*\s+$(NAME)$$'
+
+_run:
+	$(weave_running)
+	set -x &&\
+	if ! $(container_exists); then \
+	eval "$$(weave env)" &&\
+	$(DOCKER_CMD) ;\
+	elif ! $(container_running); then \
+	$(DOCKER_RUN) ;\
+	fi
+
+_rerun: rm run
+
+_rm:
+	$(weave_running)
+	set -x &&\
+	if $(container_exists); then \
+	eval "$$(weave env)" &&\
+	docker rm -f $(NAME) ;\
+	fi
+
+_stop:
+	$(weave_running)
+	if $(container_exists); then \
+	eval "$$(weave env)"; \
+	docker stop $(NAME); \
+	fi
+
+_clean: rm
+
+_test:
+	[ -n "`$(container_exists)`" ]
+	
+_restart: $(WEAVE) test
+	$(weave_running)
+	eval "$$(weave env)"; \
+	docker restart $(NAME)
+
+_bash:
+	docker exec -it $(NAME) bash
+	
+_containeruser:
+	$(call check_defined, CONTAINER_USER, The local user of the run container)
+	sudo useradd -rU $(CONTAINER_USER); true
+
+data_container_name = $(subst /,_,$(DATA_MOUNT_PATH))
+data_container_exists = docker ps -a | egrep '^.*\s+$(DATA_CONTAINER_NAME)$$'>/dev/null
+
+define DOCKER_DATA_CMD ?=
+sudo docker run \
+-v $(DATA_VOL_NAME):/$(DATA_MOUNT_PATH) \
+--volume-driver=convoy \
+--name $(DATA_CONTAINER_NAME) \
+-d $(DATA_IMAGE_NAME) \
+true 
+endef
+
+_dataContainer:
+	$(call check_defined, DATA_IMAGE_NAME DATA_VOL_NAME DATA_MOUNT_PATH DATA_CONTAINER_NAME, Image name, volume name, mount path and name of the data container)
+	set -x &&\
+	if ! $(data_container_exists); then \
+	$(DOCKER_DATA_CMD) ;\
+	fi
+
+_rm_dataContainer:
+	$(call check_defined, DATA_CONTAINER_NAME, Data container name)
+	if $(data_container_exists); then \
+	sudo docker rm -f $(DATA_CONTAINER_NAME); \
+	fi
+
+_testDataContainer:
+	$(call check_defined, DATA_CONTAINER_NAME, Data container name)
+	$(data_container_exists)
+
+_clean_dataContainer: rm_dataContainer
+	sudo convoy umount $(DATA_VOL_NAME)
+	sudo convoy delete $(DATA_VOL_NAME)
