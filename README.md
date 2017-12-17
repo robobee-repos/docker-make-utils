@@ -47,16 +47,57 @@ expected to provide the `Dockerfile` and to set image related variables.
 
 ### Variables
 
-  Variable                Default     Description
-  ----------------------- ----------- ------------------------------------------
-  SHELL                   /bin/bash   The shell of the Makefile goals.
-  .DEFAULT\_GOAL          help        The default goal.
-  .PHONY                              All of the goals mentioned below.
-  NAME                                The image name.
-  VERSION                             The image version.
-  REPOSITORY                          The docker hub repository.
-  DOCKER\_HUB\_USER                   The docker hub repository user name.
-  DOCKER\_HUB\_PASSWORD               The docker hub repository user password.
+<table>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>SHELL</td>
+<td>/bin/bash</td>
+<td>The shell of the Makefile goals.</td>
+</tr>
+<tr class="even">
+<td>.DEFAULT_GOAL</td>
+<td>help</td>
+<td>The default goal.</td>
+</tr>
+<tr class="odd">
+<td>.PHONY</td>
+<td></td>
+<td>All of the goals mentioned below.</td>
+</tr>
+<tr class="even">
+<td>NAME</td>
+<td></td>
+<td>The image name.</td>
+</tr>
+<tr class="odd">
+<td>VERSION</td>
+<td></td>
+<td>The image version.</td>
+</tr>
+<tr class="even">
+<td>REPOSITORY</td>
+<td></td>
+<td>The docker hub repository.</td>
+</tr>
+<tr class="odd">
+<td>DOCKER_HUB_USER</td>
+<td></td>
+<td>The docker hub repository user name.</td>
+</tr>
+<tr class="even">
+<td>DOCKER_HUB_PASSWORD</td>
+<td></td>
+<td>The docker hub repository user password.</td>
+</tr>
+</tbody>
+</table>
 
 ### Example Image Makefile
 
@@ -87,20 +128,77 @@ targets to create a local user for the Docker container.
 
 ### Variables
 
-  Variable                Default                 Description
-  ----------------------- ----------------------- ---------------------------------------------------------------------
-  SHELL                   /bin/bash               The shell of the Makefile goals.
-  WEAVE                   /usr/local/bin/weave    The path of the weave tool.
-  CONTAINER\_USER                                 The local container user. Used by the `_containeruser` goal.
-  .DEFAULT\_GOAL          run                     The default goal.
-  .PHONY                                          All of the goals mentioned below.
-  NAME                                            The container name.
-  DOCKER\_CMD                                     The docker command to create the container.
-  DOCKER\_RUN             docker start \$(NAME)   The local container user. Used by the `_containeruser` goal.
-  DATA\_IMAGE\_NAME                               The data docker container image name, for example "mysql:latest".
-  DATA\_VOL\_NAME                                 The convoy volume name, for example "vol1".
-  DATA\_MOUNT\_PATH                               The data docker container mount path, for example "/var/lib/mysql".
-  DATA\_CONTAINER\_NAME                           The data docker container name, for example "db\_data".
+<table>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>SHELL</td>
+<td>/bin/bash</td>
+<td>The shell of the Makefile goals.</td>
+</tr>
+<tr class="even">
+<td>WEAVE</td>
+<td>/usr/local/bin/weave</td>
+<td>The path of the weave tool.</td>
+</tr>
+<tr class="odd">
+<td>CONTAINER_USER</td>
+<td></td>
+<td>The local container user. Used by the <code>_containeruser</code> goal.</td>
+</tr>
+<tr class="even">
+<td>.DEFAULT_GOAL</td>
+<td>run</td>
+<td>The default goal.</td>
+</tr>
+<tr class="odd">
+<td>.PHONY</td>
+<td></td>
+<td>All of the goals mentioned below.</td>
+</tr>
+<tr class="even">
+<td>NAME</td>
+<td></td>
+<td>The container name.</td>
+</tr>
+<tr class="odd">
+<td>DOCKER_CMD</td>
+<td></td>
+<td>The docker command to create the container.</td>
+</tr>
+<tr class="even">
+<td>DOCKER_RUN</td>
+<td>docker start $(NAME)</td>
+<td>The local container user. Used by the <code>_containeruser</code> goal.</td>
+</tr>
+<tr class="odd">
+<td>DATA_IMAGE_NAME</td>
+<td></td>
+<td>The data docker container image name, for example &quot;mysql:latest&quot;.</td>
+</tr>
+<tr class="even">
+<td>DATA_VOL_NAME</td>
+<td></td>
+<td>The convoy volume name, for example &quot;vol1&quot;.</td>
+</tr>
+<tr class="odd">
+<td>DATA_MOUNT_PATH</td>
+<td></td>
+<td>The data docker container mount path, for example &quot;/var/lib/mysql&quot;.</td>
+</tr>
+<tr class="even">
+<td>DATA_CONTAINER_NAME</td>
+<td></td>
+<td>The data docker container name, for example &quot;db_data&quot;.</td>
+</tr>
+</tbody>
+</table>
 
 ### Examples
 
