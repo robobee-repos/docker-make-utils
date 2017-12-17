@@ -49,13 +49,45 @@ expected to provide the `Dockerfile` and to set image related variables.
 
 ### Variables
 
-| *.Variable |*.Default | \_.Description |  
-| `NAME` | | The image name. |  
-| `VERSION` | | The image version. |  
-| `REPOSITORY` | | The docker hub repository. |  
-| `DOCKER_HUB_USER` | | The docker hub repository user name. |  
-| `DOCKER_HUB_PASSWORD` | | The docker hub repository user password. |  
-| `APT_CACHE` | | Optionally, the URL of the apt-cacher. |
+<table>
+<tbody>
+<tr class="odd">
+<td>_.Variable</td>
+<td>_.Default</td>
+<td>_.Description</td>
+</tr>
+<tr class="even">
+<td><code>NAME</code></td>
+<td></td>
+<td>The image name.</td>
+</tr>
+<tr class="odd">
+<td><code>VERSION</code></td>
+<td></td>
+<td>The image version.</td>
+</tr>
+<tr class="even">
+<td><code>REPOSITORY</code></td>
+<td></td>
+<td>The docker hub repository.</td>
+</tr>
+<tr class="odd">
+<td><code>DOCKER_HUB_USER</code></td>
+<td></td>
+<td>The docker hub repository user name.</td>
+</tr>
+<tr class="even">
+<td><code>DOCKER_HUB_PASSWORD</code></td>
+<td></td>
+<td>The docker hub repository user password.</td>
+</tr>
+<tr class="odd">
+<td><code>APT_CACHE</code></td>
+<td></td>
+<td>Optionally, the URL of the apt-cacher.</td>
+</tr>
+</tbody>
+</table>
 
 ### Example Image Makefile
 

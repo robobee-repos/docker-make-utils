@@ -39,13 +39,13 @@ Provides targets to build and to deploy a Docker image. The user is expected to 
 
 h3. Variables
 
-| _.Variable | _.Default | _.Description | 
-| @NAME@ | | The image name. | 
-| @VERSION@ | | The image version. | 
-| @REPOSITORY@ | | The docker hub repository. | 
-| @DOCKER_HUB_USER@ | | The docker hub repository user name. | 
-| @DOCKER_HUB_PASSWORD@ | | The docker hub repository user password. | 
-| @APT_CACHE@ | | Optionally, the URL of the apt-cacher. | 
+| _.Variable | _.Default | _.Description |
+| @NAME@ | | The image name. |
+| @VERSION@ | | The image version. |
+| @REPOSITORY@ | | The docker hub repository. |
+| @DOCKER_HUB_USER@ | | The docker hub repository user name. |
+| @DOCKER_HUB_PASSWORD@ | | The docker hub repository user password. |
+| @APT_CACHE@ | | Optionally, the URL of the apt-cacher. |
 
 h3. Example Image Makefile
 
