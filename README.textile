@@ -39,7 +39,7 @@ Provides targets to build and to deploy a Docker image. The user is expected to 
 
 h3. Variables
 
-| _.Variable | _.Default | _.Description |
+|_.Variable|_.Default|_.Description|
 | @NAME@ | | The image name. |
 | @VERSION@ | | The image version. |
 | @REPOSITORY@ | | The docker hub repository. |
