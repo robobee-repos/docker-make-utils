@@ -1,27 +1,28 @@
-# The shell of the Makefile goals.
+# Shell of the Makefile goals.
 SHELL := /bin/bash
 
-# The default goal.
+# Default goal.
 .DEFAULT_GOAL := run
 
-# The container name.
+# Container name.
 #NAME :=
 
-# The docker command to create the container.
+# Docker command to create the container.
 #DOCKER_CMD :=
 
-# The image name.
+# Image name.
 IMAGE := $(IMAGE_NAME):$(VERSION)
 
-# The container name.
+# Data container name.
 DATA_NAME := $(NAME)-data
 
-# The docker command to create the data container.
+# Docker command to create the data container.
 #DATA_DOCKER_CMD :=
 
-# The docker command to start the container.
+# Docker command to start the container.
 DOCKER_RUN ?= docker start $(NAME)
 
+.PHONY: _run
 _run:
 	set -x && \
 	if ! $(container_exists); then \
@@ -29,53 +30,52 @@ _run:
 	elif ! $(container_running); then \
 	$(DOCKER_RUN) ;\
 	fi
-.PHONY: _run
 
-_rerun: rm run
 .PHONY: _rerun
+_rerun: rm run
 
+.PHONY: _rm
 _rm:
 	set -x && \
 	if $(container_exists); then \
 	docker rm -f $(NAME) ;\
 	fi
-.PHONY: _rm
 
+.PHONY: _stop
 _stop:
 	if $(container_exists); then \
 	docker stop $(NAME); \
 	fi
-.PHONY: _stop
 
-_clean: rm
 .PHONY: _clean
+_clean: rm
 
+.PHONY: _test
 _test:
 	[ -n "`$(container_exists)`" ]
-.PHONY: _test
 
+.PHONY: _restart
 _restart: test
 	docker restart $(NAME)
-.PHONY: _restart
 
+.PHONY: _bash
 _bash:
 	docker exec -it $(NAME) bash
-.PHONY: _bash
 
+.PHONY: container-ip
 container-ip:
 	docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(NAME)
-.PHONY: container-ip
 
+.PHONY: _data-run
 _data-run:
 	set -x && \
 	if ! $(data_container_exists); then \
 	$(DATA_DOCKER_CMD) ;\
 	fi
-.PHONY: _data-run
 
+.PHONY: _data-rm
 _data-rm:
 	set -x && \
 	if $(data_container_exists); then \
 	docker rm -f $(DATA_NAME) ;\
 	fi
-.PHONY: _data-rm

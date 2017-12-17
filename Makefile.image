@@ -16,6 +16,7 @@ $(call check_defined, VERSION, docker image name)
 
 image_build = docker images | egrep '$(REPOSITORY)/$(NAME)\s*$(VERSION)'
 
+.PHONY: _build
 _build:
 	$(call check_defined, VERSION, Image version)
 	set $(SET_FLAG) \
@@ -33,8 +34,8 @@ _build:
 	-t $(REPOSITORY)/$(NAME):$(VERSION) \
 	-t $(REPOSITORY)/$(NAME):latest .; \
 	fi
-.PHONY: _build
-	
+
+.PHONY: _clean
 _clean:
 	$(call check_defined, VERSION, Image version)
 	if $(image_build); then \
@@ -42,16 +43,15 @@ _clean:
 	docker rmi -f $(REPOSITORY)/$(NAME):$(VERSION) ;\
 	docker rmi -f $(REPOSITORY)/$(NAME):latest ;\
 	fi
-.PHONY: _clean
-	
+
+.PHONY: _deploy
 _deploy: build
 	$(call check_defined, VERSION, Image version)
 	$(call check_defined, DOCKER_HUB_USER DOCKER_HUB_PASSWORD, Docker repository login)
 	docker login -u $(DOCKER_HUB_USER) -p $(DOCKER_HUB_PASSWORD) && \
 	docker push $(REPOSITORY)/$(NAME):$(VERSION) && \
 	docker push $(REPOSITORY)/$(NAME):latest
-.PHONY: _deploy
 
+.PHONY: _rebuild
 _rebuild: 
 	$(MAKE) build SKIP_CHECK=0
-.PHONY: _rebuild
